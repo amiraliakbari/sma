@@ -1,3 +1,5 @@
+# Python
+*.pyc
 *.py[co]
 
 # Packages
@@ -16,6 +18,9 @@ develop-eggs
 # Installer logs
 pip-log.txt
 
+# IDEs
+/.idea
+
 # Unit test / coverage reports
 .coverage
 .tox
@@ -23,5 +28,13 @@ pip-log.txt
 #Translations
 *.mo
 
+# Version Control
+*.orig
+*.sqlite
+
 #Mr Developer
 .mr.developer.cfg
+
+# Project Structure:
+*local_settings.py
+logs/*
