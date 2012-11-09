@@ -91,7 +91,7 @@ class Member(models.Model):
     gender = models.CharField(max_length=2, choices=GENDER)
     birth = models.DateField(null=True, blank=True)
     identification_number = models.CharField(max_length=20, blank=True)
-    image = models.ImageField(upload_to=settings.MEDIA_ROOT + MEMBER_IMAGE_UPLOAD_DIR, blank=True)
+    image = models.FileField(upload_to=settings.MEDIA_ROOT + MEMBER_IMAGE_UPLOAD_DIR, blank=True)
     wife = models.OneToOneField('self', null=True, blank=True, related_name='husband')
 
     phone = models.CharField(max_length=20, blank=True)
@@ -108,7 +108,9 @@ class Member(models.Model):
     def image_url(self):
         mr = settings.MEDIA_ROOT + MEMBER_IMAGE_UPLOAD_DIR
         path = ''
-        if not self.image or not self.image.path.startswith(mr):
+        if self.image and self.image.path.startswith(MEMBER_IMAGE_UPLOAD_DIR):
+            path = self.image.path[len(MEMBER_IMAGE_UPLOAD_DIR)]
+        elif not self.image or not self.image.path.startswith(mr):
             if self.is_female:
                 path = 'no_image_female.png'
             else:
