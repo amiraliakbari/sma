@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'people/entries-list' domain.code_name %}">بازگشت به لیست دوره‌ها</a></li>
+        <li><a href="{% url 'admin:people_member_add' %}" target="_blank">افزودن فرد جدید</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for member in members %}
+            <li><a href="{% url 'people/member-view' domain.code_name entry.id member.id %}">{{ member }}</a></li>
+        {% empty %}
+            <li>هیچ فردی در این دوره تعریف نشده است، برای تعریف فرد جدید از لینک‌های سمت راست صفحه استفاده کنید.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,9 +1,19 @@
 {% extends 'base.html' %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'home' %}">بازگشت به صفحه‌ی اصلی</a></li>
+        <li><a href="{% url 'admin:people_entry_changelist' %}" target="_blank">مدیریت دوره‌ها</a></li>
+    </ul>
+{% endblock %}
 
 {% block content %}
     <ul>
         {% for entry in entries %}
-        <li><a href="#">{{ entry }}</a></li>
+            <li><a href="{% url 'people/members-list' domain.code_name entry.id %}">{{ entry }}</a></li>
+        {% empty %}
+            <li>هیچ دوره‌ای تعریف نشده است، برای تعریف دوره از لینک‌های سمت راست صفحه استفاده کنید.</li>
         {% endfor %}
     </ul>
 {% endblock %}

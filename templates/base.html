@@ -7,6 +7,7 @@
 		<link href="/static/images/favicon.ico" rel="shortcut icon">
         {% css 'style' %}
         {% block CSS %}{% endblock CSS %}
+        {% js 'common' %}
         {% block JS %}{% endblock JS %}
 	</head>
 
@@ -18,6 +19,7 @@
         </div>
         <div id="sidebar" style="display: inline-block; width: 23%; vertical-align: top;">
             پیمایش:
+            {% block sidebar %}{% endblock %}
         </div>
         <div id="content" style="display: inline-block; width: 75%; vertical-align: top;">
             {% block content %}

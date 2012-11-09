@@ -1,4 +1,13 @@
 {% extends 'base.html' %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        {% for domain in domains %}
+        <li><a href="{% url 'people/entries-list' domain.code_name %}">{{ domain }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 
 {% block content %}
     <div style="text-align: center">

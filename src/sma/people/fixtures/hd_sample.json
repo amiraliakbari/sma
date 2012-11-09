@@ -81,9 +81,28 @@
             "identification_number":"",
             "user":1,
             "birth":"1991-06-23",
-            "entry":2,
+            "entry":1,
             "employment_records":[],
             "university_records":[1]
+        }
+    },
+    {
+        "pk":2,
+        "model":"people.member",
+        "fields":{
+            "first_name":"\u0627\u0644\u0641",
+            "last_name":"\u0628",
+            "wife":null,
+            "mobile":"",
+            "gender":"M",
+            "image":"",
+            "phone":"",
+            "identification_number":"",
+            "user":null,
+            "birth":null,
+            "entry":1,
+            "employment_records":[],
+            "university_records":[]
         }
     }
 ]

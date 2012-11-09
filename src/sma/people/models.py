@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -57,7 +58,7 @@ class UniversityRecord(models.Model):
     description = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
-        return u'%s: %s [%d-%d]' % (self.university, self.field, self.start_year, self.end_year)
+        return u'%s: %s [%d تا %d]' % (self.university, self.field, self.start_year, self.end_year)
 
 
 class Company(Named):
@@ -75,10 +76,11 @@ class EmploymentRecord(models.Model):
         return unicode(self.company) if self.company else self.description
 
     def __unicode__(self):
-        return u'%s: %s [%d-%d]' % (self.get_workplace_name(), self.position, self.start_year, self.end_year)
+        return u'%s: %s [%d تا %d]' % (self.get_workplace_name(), self.position, self.start_year, self.end_year)
 
 
 GENDER = (('M', u'مذکر'), ('F', u'مونث'))
+MEMBER_IMAGE_UPLOAD_DIR = 'uploads/people/images/'
 
 class Member(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
@@ -89,7 +91,7 @@ class Member(models.Model):
     gender = models.CharField(max_length=2, choices=GENDER)
     birth = models.DateField(null=True, blank=True)
     identification_number = models.CharField(max_length=20, blank=True)
-    image = models.ImageField(upload_to=settings.MEDIA_ROOT + 'uploads/people/images/', blank=True)
+    image = models.ImageField(upload_to=settings.MEDIA_ROOT + MEMBER_IMAGE_UPLOAD_DIR, blank=True)
     wife = models.OneToOneField('self', null=True, blank=True, related_name='husband')
 
     phone = models.CharField(max_length=20, blank=True)
@@ -100,7 +102,30 @@ class Member(models.Model):
 
     @property
     def title(self):
-        return u'خانم' if self.gender == 'F' else u'آقای'
+        return u'خانم' if self.is_female else u'آقای'
+
+    @property
+    def image_url(self):
+        mr = settings.MEDIA_ROOT + MEMBER_IMAGE_UPLOAD_DIR
+        path = ''
+        if not self.image or not self.image.path.startswith(mr):
+            if self.is_female:
+                path = 'no_image_female.png'
+            else:
+                path = 'no_image_male.png'
+        else:
+            path = self.image.path[len(mr):]
+        return settings.MEDIA_URL + MEMBER_IMAGE_UPLOAD_DIR + path
+
+    @property
+    def is_female(self):
+        return self.gender == 'F'
+
+    @property
+    def age(self):
+        if not self.birth:
+            return None
+        return (date.today() - self.birth).days / 365
 
     def __unicode__(self):
         return u'%s %s %s' % (self.title, self.first_name, self.last_name)
