@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul>
+        {% for entry in entries %}
+        <li><a href="#">{{ entry }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
