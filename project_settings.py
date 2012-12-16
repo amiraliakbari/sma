@@ -17,4 +17,5 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'dj_utils',
 
-    'sma.people')
+    'sma.people',
+    'sma.books',)

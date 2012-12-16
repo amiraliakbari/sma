@@ -11,7 +11,7 @@
 {% block content %}
     <ul>
         {% for member in members %}
-            <li><a href="{% url 'people/member-view' domain.code_name entry.id member.id %}">{{ member }}</a></li>
+            <li><a href="{% url 'people/member-view-personal' domain.code_name entry.id member.id %}">{{ member }}</a></li>
         {% empty %}
             <li>هیچ فردی در این دوره تعریف نشده است، برای تعریف فرد جدید از لینک‌های سمت راست صفحه استفاده کنید.</li>
         {% endfor %}

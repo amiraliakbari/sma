@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load basic pdate %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'people/members-list' domain.code_name entry.id %}">بازگشت به لیست افراد  دوره</a></li>
+        <li><a href="{% url 'admin:people_member_change' member.id %}" target="_blank">ویرایش اطلاعات این فرد</a></li>
+        <li><a href="/admin/books/" >مدیریت کتاب‌ها</a></li>
+        <li><a href="{% url 'people/dictionary' %}" >واژه‌نامه</a></li>
+    </ul>
+    <ul>
+        <li><a href="{% url 'people/member-view-personal' domain.code_name entry.id member.id %}">نمای مشخصات فردی</a></li>
+        <li><a href="{% url 'people/member-view-educational' domain.code_name entry.id member.id %}">نمای اطلاعات آموزشی</a></li>
+        <li><b>نمای نهاد سرپرستی</b></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <style>
+        .name {
+            text-align: center;
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        table th {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        table ul {
+            padding-right: 15px;
+        }
+
+        table ul p {
+            margin-top: 5px;
+        }
+    </style>
+    <style>
+        textarea {
+            width: 400px;
+            height: 75px;
+        }
+
+        .label, .label-t {
+            width: 200px;
+            text-align: left;
+            font-weight: bold;
+            display: inline-block;
+            padding-left: 10px;
+            vertical-align: top;
+        }
+
+        .label {
+            padding-top: 30px;
+        }
+
+    hr {
+        width: 770px;
+        text-align: right;
+        margin: 30px -70px 30px 0;
+        opacity: 0.5;
+    }
+    </style>
+    <table border="0" style="margin-right: 100px;;">
+        <tr>
+            <th></th>
+            <td>&nbsp;</td>
+            <td rowspan="3"><img src="{{ member.image_url }}" width="150px" style="margin-right: 200px;"/></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td class="name">{{ member.first_name }}، {{ member.last_name }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td style="text-align: left">{{ member.entry }}<br/>{{ member.admission_status }}</td>
+        </tr>
+    </table>
+    <div>
+        <hr/>
+        <h2>خط سیر زندگی</h2>
+        <div id="timeline">*---------------------**********-----==================----------------*****----------*-------</div>
+        <div style="text-align: center" onclick="$('#timeline-details').slideToggle()">جزییات...</div>
+        <div id="timeline-details" style="display: none">
+            <ul>
+                <li>در تاریخ تولدش متولد شد</li>
+                <li>وارد دبیرستان شد</li>
+                <li>وارد دانشگاه شد</li>
+            </ul>
+        </div>
+
+        <hr/>
+        <h2>تحلیل کلی شخصیت</h2>
+        <form method="post">
+            {% csrf_token %}
+            <span class="label">{{ form.effective_inputs.label }}:</span> {{ form.effective_inputs }} {{ form.effective_inputs.errors }}<br/>
+            <span class="label">{{ form.effective_environments.label }}:</span> {{ form.effective_environments }} {{ form.effective_environments.errors }}<br/>
+            <span class="label">{{ form.effective_beliefs.label }}:</span> {{ form.effective_beliefs }} {{ form.effective_beliefs.errors }}<br/>
+            <span class="label">{{ form.concerns_analysis.label }}:</span> {{ form.concerns_analysis }} {{ form.concerns_analysis.errors }}<br/>
+            <span class="label">{{ form.final_analysis.label }}:</span> {{ form.final_analysis }} {{ form.final_analysis.errors }}<br/>
+
+            <hr/>
+            <h2>ابعاد مختلف زندگی</h2>
+            <h3>بعد معرفتی</h3>
+            <div>
+                <span class="label-t">عناصر معرفت‌افزا:</span>
+                <ul style="padding-right: 230px">
+                    {% for book in member.sarparasti_profile.readings %}
+                        <li>{{ book }}</li>
+                    {% empty %}
+                        <li>موردی ثبت نشده</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <span class="label">{{ form.knowledge_details.label }}:</span> {{ form.knowledge_details }} {{ form.knowledge_details.errors }}<br/>
+
+            <h3>بعد اخلاقی</h3>
+            <span class="label-t">{{ form.dars_akhlagh.label }}:</span> {{ form.dars_akhlagh }} {{ form.dars_akhlagh.errors }}<br/>
+            <span class="label-t">{{ form.morabbi_akhlagh.label }}:</span> {{ form.morabbi_akhlagh }} {{ form.morabbi_akhlagh.errors }}<br/>
+            <span class="label">{{ form.akhlagh_details.label }}:</span> {{ form.akhlagh_details }} {{ form.akhlagh_details.errors }}<br/>
+
+            <h3>بعد اجتماعی</h3>
+            <span class="label">{{ form.political_activities.label }}:</span> {{ form.political_activities }} {{ form.political_activities.errors }}<br/>
+            <span class="label">{{ form.social_details.label }}:</span> {{ form.social_details }} {{ form.social_details.errors }}<br/>
+
+            <h3>بعد حرفه‌ای</h3>
+            <span class="label">{{ form.mission.label }}:</span> {{ form.mission }} {{ form.mission.errors }}<br/>
+            <span class="label">{{ form.skills.label }}:</span> {{ form.skills }} {{ form.skills.errors }}<br/>
+            <span class="label">{{ form.service_pattern.label }}:</span> {{ form.service_pattern }} {{ form.service_pattern.errors }}<br/>
+            <span class="label">{{ form.service_environment.label }}:</span> {{ form.service_environment }} {{ form.service_environment.errors }}<br/>
+            <span class="label">{{ form.technical_details.label }}:</span> {{ form.technical_details }} {{ form.technical_details.errors }}<br/>
+
+            <hr/>
+            <div style="text-align: center">
+                <input type="submit" value="ذخیره‌سازی" />
+            </div>
+            <hr/>
+        </form>
+    </div>
+{% endblock %}

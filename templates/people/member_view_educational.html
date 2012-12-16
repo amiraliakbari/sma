@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load pdate %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'people/members-list' domain.code_name entry.id %}">بازگشت به لیست افراد  دوره</a></li>
+        <li><a href="{% url 'admin:people_member_change' member.id %}" target="_blank">ویرایش اطلاعات این فرد</a></li>
+    </ul>
+    <ul>
+        <li><a href="{% url 'people/member-view-personal' domain.code_name entry.id member.id %}">نمای مشخصات فردی</a></li>
+        <li><b>نمای اطلاعات آموزشی</b></li>
+        <li><a href="{% url 'people/member-view-sarparasti' domain.code_name entry.id member.id %}">نمای نهاد سرپرستی</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <style>
+        .name {
+            text-align: center;
+            font-weight: bold;
+            font-size: larger;
+        }
+
+        table th {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        table ul {
+            padding-right: 15px;
+        }
+
+        table ul p {
+            margin-top: 5px;
+        }
+    </style>
+    <table border="0" style="margin-right: 100px;">
+        <tr>
+            <th></th>
+            <td>&nbsp;</td>
+            <td rowspan="3"><img src="{{ member.image_url }}" width="150px" style="margin-right: 200px;"/></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td class="name">{{ member.first_name }}، {{ member.last_name }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td style="text-align: left">{{ member.entry }}<br/>{{ member.admission_status }}</td>
+        </tr>
+        <tr>
+            <th>سن:</th>
+            <td>{{ member.age|default:'-' }}</td>
+        </tr>
+        <tr>
+            <th>سوابق تحصیلی:</th>
+            <td>
+                <ul>
+                    {#                    {% for record in member.university_records.all %}#}
+                    {% for record in member.unr %}
+                        <li>{{ record }}</li>
+                    {% empty %}
+                        <b>سوابق: </b><span>ثبت نشده</span>
+                    {% endfor %}
+                    <p><b>وضعیت فعلی: </b><span>{{ member.univerity_status }}</span></p>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>آخرین معدل دانشگاهی:</th>
+            <td>{{ member.university_average|default:'ثبت نشده' }}</td>
+        </tr>
+    </table>
+{% endblock %}

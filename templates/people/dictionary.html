@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'admin:people_dictionaryword_changelist' %}" target="_blank">مدیریت واژه‌نامه</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div>
+        {% for letter, ws in words.items %}
+            <h2>{{ letter }}</h2>
+            {% for w in ws %}
+                <p><b>{{ w.name }}: </b><span>{{ w.definition }}</span></p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}
