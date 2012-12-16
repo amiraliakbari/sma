@@ -144,6 +144,10 @@ class Member(models.Model):
         return self.gender == 'F'
 
     @property
+    def is_male(self):
+        return self.gender == 'M'
+
+    @property
     def age(self):
         if not self.birth:
             return None

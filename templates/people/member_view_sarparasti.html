@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load basic pdate %}
+{% load basic pdate members %}
 {% load url from future %}
 
 {% block sidebar %}
@@ -17,6 +17,23 @@
 {% endblock %}
 
 {% block content %}
+    <script type="text/javascript">
+        function add_book(){
+            var href = '{% url 'admin:books_reading_add' %}?_popup=1';
+            var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+            win.onload = function() {
+                $(win.document).contents().find('#id_user').val({{ member.user_id }});
+            };
+            win.focus();
+            return false;
+        }
+
+        function dismissAddAnotherPopup(win, id, name) {
+            win.close();
+            $('#readings_ul li:last').after('<li>'+name+'</li>');
+            $('#no-reading').remove();
+        }
+    </script>
     <style>
         .name {
             text-align: center;
@@ -71,7 +88,7 @@
         </tr>
         <tr>
             <th></th>
-            <td class="name">{{ member.first_name }}، {{ member.last_name }}</td>
+            <td class="name">{{ member.first_name }}، {{ member.last_name }} {% guess_spouse member 'sarparasti' %}</td>
         </tr>
         <tr>
             <th></th>
@@ -106,12 +123,13 @@
             <h3>بعد معرفتی</h3>
             <div>
                 <span class="label-t">عناصر معرفت‌افزا:</span>
-                <ul style="padding-right: 230px">
+                <ul id="readings_ul" style="padding-right: 230px">
                     {% for book in member.sarparasti_profile.readings %}
-                        <li>{{ book }}</li>
+                        <li>{{ book }} <a href="{% url 'admin:books_reading_delete' book.id %}" target="_blank">حذف</a></li>
                     {% empty %}
-                        <li>موردی ثبت نشده</li>
+                        <li id="no-reading">موردی ثبت نشده</li>
                     {% endfor %}
+                    <a href="#" onclick="return add_book();">افزودن کتاب...</a>
                 </ul>
             </div>
             <span class="label">{{ form.knowledge_details.label }}:</span> {{ form.knowledge_details }} {{ form.knowledge_details.errors }}<br/>

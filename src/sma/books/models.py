@@ -77,4 +77,4 @@ class Reading(models.Model):
         verbose_name_plural = u'کتاب‌های خوانده شده'
 
     def __unicode__(self):
-        return u'%s %s، خوانده شده توسط %s (%%%s)' % (self.book.type, self.book.name, self.user.get_full_name(), unicode(self.percent_read) if self.percent_read else '?')
+        return u'%s %s، خوانده شده توسط %s (%%%s، %s)' % (self.book.type, self.book.name, self.user.get_full_name(), unicode(self.percent_read) if self.percent_read else u'۰', self.subject)

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load pdate %}
+{% load pdate members %}
 {% load url from future %}
 
 {% block sidebar %}
@@ -62,10 +62,16 @@
             <th>وضعیت تاهل:</th>
             <td>{{ member.marriage_status|default:'-' }}</td>
         </tr>
+        {% if member.is_male %}
+        <tr>
+            <th>وضعیت سربازی:</th>
+            <td>{{ member.military_service_status|default:'-' }}</td>
+        </tr>
+        {% endif %}
         {% if member.spouse %}
         <tr>
             <th>همسر:</th>
-            <td>{{ member.spouse|default:'-' }}</td>
+            <td>{{ member.spouse|default:'-' }} {% guess_spouse member 'personal' %}</td>
         </tr>
         <tr>
             <th>تاریخ ازدواج:</th>
